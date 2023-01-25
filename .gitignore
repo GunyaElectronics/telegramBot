@@ -131,3 +131,6 @@ dmypy.json
 # Default ignored files
 /shelf/
 /workspace.xml
+
+# telegram log file
+log.txt
