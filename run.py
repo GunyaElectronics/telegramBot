@@ -1,68 +1,41 @@
-import threading
-import time
-import telebot
-import logging
+print('hello')
+# class 'str'
+name = 'Maxim'  # variable str
+# input("please enter name: ")
+# printing methods
+print("Hi, ", name, "!")
+# f"string" example (formatted)
+print(f"Hi , {name}!")
+print("Hi, ", name, "!", sep='')
 
-bot_is_running = False
+# raw string example
+raw_str = r"something \" \ \' ''"
 
+# string concat
+some_str = 'Some "interested" ' + " text '666'"
+print(some_str)
+# string * (n)
+print(some_str * 2)
 
-def remove_new_line(s):
-    return s.replace("\n", "")
+# in operator examples
+some_in = 'dda'
+result = some_in in some_str
+print(result)
+print(' text' in some_str)
 
+# symbol indexes
+print(some_str[4])
+print(some_str[-2])
+# print from symbol 2 to symbol 14
+print(some_str[2:14])
 
-def time_pooling_thread():
-    while bot_is_running:
-        time.sleep(60)
-        print("Current time: %s" % (time.ctime(time.time())))
-    print('Destroy time pooling thread')
+some_str2 = "H e l l o   w o r l d"
+# print from symbol 0 to symbol 21 with step 2
+print(some_str2[0:21:2])
+text_example = "My name is Maxim, and I learning the PYTHON language"
+print(text_example.upper())
+print(text_example.lower())
 
-
-def init_log():
-    logging.basicConfig(filename=logfile, level=logging.DEBUG, format='%(asctime)s %(message)s')
-    logging.info('Telegram Bot V0.1 was started')
-
-
-settings = open('../token.txt', 'r')
-
-token = remove_new_line(settings.readline())
-password = remove_new_line(settings.readline())
-logfile = remove_new_line(settings.readline())
-
-settings.close()
-
-init_log()
-
-bot_is_running = True
-
-bot = telebot.TeleBot(token)
-
-
-# Command format "/stop password"
-@bot.message_handler(commands=['stop'])
-def start_message(message):
-    global bot_is_running
-    s = message.text.split()
-    if s.__len__() != 2:
-        bot.send_message(message.chat.id, 'Incorrect format')
-    elif s[1] != password:
-        bot.send_message(message.chat.id, 'Incorrect passwd')
-    else:
-        bot.send_message(message.chat.id, 'Bot will be stopped')
-        bot_is_running = False
-        bot.stop_polling()
-
-
-try:
-    threading.Thread(target=time_pooling_thread).start()
-except Exception as e:
-    logging.error("Error: unable to start thread" + e.__str__())
-
-while True:
-    try:
-        bot.polling(none_stop=True)
-        if not bot_is_running:
-            print('exit 0')
-            exit(0)
-    except Exception as e:
-        logging.error("Error: " + e.__str__())
-        time.sleep(1)
+# class 'int'
+# class 'float'
+# class 'complex'
