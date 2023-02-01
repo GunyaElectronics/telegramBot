@@ -38,3 +38,18 @@ We love each other and always try to spend more time together.
 print(text)
 words = text.split(' ')
 print(sum("the" in line.lower() for line in words))
+
+if 'First' in text:
+    print('Yes')
+
+# not recommended
+if text[1] == 'M': print('1'); print(2); print(3)
+
+# python ternary operator
+age = 12
+s = 'little' if age < 21 else 'high'
+print(s)
+
+if False:
+    pass
+print('hell0')
