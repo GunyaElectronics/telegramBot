@@ -39,7 +39,7 @@ bot = telebot.TeleBot(token)
 
 # Command format "/stop password"
 @bot.message_handler(commands=['stop'])
-def start_message(message):
+def stop_message(message):
     global bot_is_running
     s = message.text.split()
     if s.__len__() != 2:
@@ -50,6 +50,12 @@ def start_message(message):
         bot.send_message(message.chat.id, 'Bot will be stopped')
         bot_is_running = False
         bot.stop_polling()
+
+
+@bot.message_handler(commands=['start'])
+def start_message(message):
+    bot.send_message(message.chat.id,
+                     f'Hello {message.chat.first_name} {message.chat.last_name}')
 
 
 try:
