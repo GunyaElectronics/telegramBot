@@ -36,3 +36,5 @@ I also like to help my mother with my little sister very much. Our family is ver
 We love each other and always try to spend more time together.
 """
 print(text)
+words = text.split(' ')
+print(sum("the" in line.lower() for line in words))
