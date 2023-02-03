@@ -43,3 +43,49 @@ def new_list2(l=None):
 new_list2()
 new_list2()
 new_list2()
+
+
+# tuples package to *args example
+def avg(*args):
+    total = 0
+    for v in args:
+        total += v
+    return total/len(args)
+
+
+print(avg(34, 67, 135))
+
+t = (1, 3, 5, 7, 88)
+
+print(avg(*t))
+
+
+# dictionary as function param
+# and example with documentation
+def summ(**kwargs):
+    """It is function for do nothing"""
+    pass
+    print(kwargs)
+    print(type(kwargs))
+    for key, value in kwargs.items():
+        print(key, ' --> ', value)
+
+
+summ(one=1, two=2, name='Maxim')
+
+fff = {'first': 11, 'second': 35}
+summ(**fff)
+
+print(summ.__doc__)
+
+# get annotation for functions
+print(summ.__annotations__)
+
+
+# add annotation for function
+def ff(a: int, b: str) -> float:
+    print(a, b)
+    return 3.5
+
+
+print(ff.__annotations__)
