@@ -2,6 +2,7 @@ import threading
 import time
 import telebot
 import logging
+from activity import Activity
 
 bot_is_running = False
 
@@ -56,6 +57,11 @@ def stop_message(message):
 def start_message(message):
     bot.send_message(message.chat.id,
                      f'Hello {message.chat.first_name} {message.chat.last_name}')
+
+
+@bot.message_handler(commands=['new'])
+def new_activity(message):
+    bot.send_message(message.chat.id, 'Please, enter your new activity name')
 
 
 try:
