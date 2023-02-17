@@ -2,6 +2,7 @@ import threading
 import time
 import telebot
 import logging
+from my_localisation import MyLocalisation
 from activity import Activity
 
 bot_is_running = False
@@ -24,6 +25,7 @@ def init_log():
     logging.info('Telegram Bot V0.1 was started')
 
 
+loc = MyLocalisation('../localisation.txt', encoding="utf8")
 settings = open('../token.txt', 'r')
 
 token = remove_new_line(settings.readline())
@@ -77,7 +79,7 @@ def start_message(message):
 def new_activity(message):
     global content_type_text_handler
     content_type_text_handler = new_activity_message
-    bot.send_message(message.chat.id, 'Please, enter your new activity name')
+    bot.send_message(message.chat.id, loc.text['Please, enter your new activity name'])
 
 
 @bot.message_handler(content_types='text')
