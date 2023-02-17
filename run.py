@@ -47,24 +47,24 @@ def stop_message(message):
     global bot_is_running
     s = message.text.split()
     if s.__len__() != 2:
-        bot.send_message(message.chat.id, 'Incorrect format')
+        bot.send_message(message.chat.id, loc.text['Incorrect format'])
     elif s[1] != password:
-        bot.send_message(message.chat.id, 'Incorrect passwd')
+        bot.send_message(message.chat.id, loc.text['Incorrect passwd'])
     else:
-        bot.send_message(message.chat.id, 'Bot will be stopped')
+        bot.send_message(message.chat.id, loc.text['Bot will be stopped'])
         bot_is_running = False
         bot.stop_polling()
 
 
 def units_for_new_activity(message):
-    print(f'New activity using units {message.text} for logging')
+    bot.send_message(message.chat.id, f'{message.text} {loc.text["units will be used for logging your new activity"]}')
     global content_type_text_handler
     content_type_text_handler = None
 
 
 def new_activity_message(message):
-    bot.send_message(message.chat.id, f'Activity {message.text} added successfully')
-    bot.send_message(message.chat.id, f'What are the units of measurement for {message.text}?')
+    bot.send_message(message.chat.id, f'{message.text} {loc.text["activity added successfully"]}')
+    bot.send_message(message.chat.id, f'{loc.text["What are the units of measurement for"]} {message.text}?')
     global content_type_text_handler
     content_type_text_handler = units_for_new_activity
 
@@ -72,7 +72,7 @@ def new_activity_message(message):
 @bot.message_handler(commands=['start'])
 def start_message(message):
     bot.send_message(message.chat.id,
-                     f'Hello {message.chat.first_name} {message.chat.last_name}')
+                     f'{loc.text["Hello"]} {message.chat.first_name} {message.chat.last_name}')
 
 
 @bot.message_handler(commands=['new'])
