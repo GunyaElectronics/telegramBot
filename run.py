@@ -5,6 +5,7 @@ import logging
 from activity import Activity
 
 bot_is_running = False
+content_type_text_handler = None
 
 
 def remove_new_line(s):
@@ -53,6 +54,19 @@ def stop_message(message):
         bot.stop_polling()
 
 
+def units_for_new_activity(message):
+    print(f'New activity using units {message.text} for logging')
+    global content_type_text_handler
+    content_type_text_handler = None
+
+
+def new_activity_message(message):
+    bot.send_message(message.chat.id, f'Activity {message.text} added successfully')
+    bot.send_message(message.chat.id, f'What are the units of measurement for {message.text}?')
+    global content_type_text_handler
+    content_type_text_handler = units_for_new_activity
+
+
 @bot.message_handler(commands=['start'])
 def start_message(message):
     bot.send_message(message.chat.id,
@@ -61,7 +75,18 @@ def start_message(message):
 
 @bot.message_handler(commands=['new'])
 def new_activity(message):
+    global content_type_text_handler
+    content_type_text_handler = new_activity_message
     bot.send_message(message.chat.id, 'Please, enter your new activity name')
+
+
+@bot.message_handler(content_types='text')
+def message_text(message):
+    global content_type_text_handler
+    if content_type_text_handler:
+        content_type_text_handler(message)
+    else:
+        print('this text not handled')
 
 
 try:
