@@ -47,24 +47,25 @@ def stop_message(message):
     global bot_is_running
     s = message.text.split()
     if s.__len__() != 2:
-        bot.send_message(message.chat.id, loc.text['Incorrect format'])
+        bot.send_message(message.chat.id, loc.get_text('Incorrect format'))
     elif s[1] != password:
-        bot.send_message(message.chat.id, loc.text['Incorrect passwd'])
+        bot.send_message(message.chat.id, loc.get_text('Incorrect passwd'))
     else:
-        bot.send_message(message.chat.id, loc.text['Bot will be stopped'])
+        bot.send_message(message.chat.id, loc.get_text('Bot will be stopped'))
         bot_is_running = False
         bot.stop_polling()
 
 
 def units_for_new_activity(message):
-    bot.send_message(message.chat.id, f'{message.text} {loc.text["units will be used for logging your new activity"]}')
+    bot.send_message(message.chat.id,
+                     f'{message.text} {loc.get_text("units will be used for logging your new activity")}')
     global content_type_text_handler
     content_type_text_handler = None
 
 
 def new_activity_message(message):
-    bot.send_message(message.chat.id, f'{message.text} {loc.text["activity added successfully"]}')
-    bot.send_message(message.chat.id, f'{loc.text["What are the units of measurement for"]} {message.text}?')
+    bot.send_message(message.chat.id, f'{message.text} {loc.get_text("activity added successfully")}')
+    bot.send_message(message.chat.id, f'{loc.get_text("What are the units of measurement for")} {message.text}?')
     global content_type_text_handler
     content_type_text_handler = units_for_new_activity
 
@@ -72,14 +73,14 @@ def new_activity_message(message):
 @bot.message_handler(commands=['start'])
 def start_message(message):
     bot.send_message(message.chat.id,
-                     f'{loc.text["Hello"]} {message.chat.first_name} {message.chat.last_name}')
+                     f'{loc.get_text("Hello")} {message.chat.first_name} {message.chat.last_name}')
 
 
 @bot.message_handler(commands=['new'])
 def new_activity(message):
     global content_type_text_handler
     content_type_text_handler = new_activity_message
-    bot.send_message(message.chat.id, loc.text['Please, enter your new activity name'])
+    bot.send_message(message.chat.id, loc.get_text('Please, enter your new activity name'))
 
 
 @bot.message_handler(content_types='text')

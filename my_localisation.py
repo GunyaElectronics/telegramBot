@@ -20,3 +20,9 @@ class MyLocalisation:
         # reconstructing the data as a dictionary
         d = ast.literal_eval(data)
         self.text = d
+
+    def get_text(self, key):
+        if self.text.get(key):
+            return self.text.get(key)
+        else:
+            return key
