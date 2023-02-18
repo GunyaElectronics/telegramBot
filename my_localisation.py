@@ -15,10 +15,15 @@ class MyLocalisation:
     def __init__(self, file, encoding):
         self.file = file
         self.encoding = encoding
-        with open(file, encoding=encoding) as f:
-            data = f.read()
-        # reconstructing the data as a dictionary
-        d = ast.literal_eval(data)
+        try:
+            with open(file, encoding=encoding) as f:
+                data = f.read()
+            # reconstructing the data as a dictionary
+            d = ast.literal_eval(data)
+        except FileNotFoundError:
+            print(f'File {file} not found')
+            d = {'localisation file not found': 'file not found error'}
+
         self.text = d
 
     def get_text(self, key):
