@@ -1,6 +1,5 @@
 import ast
 
-
 # Example of localisation file:
 # {"Key 1": "Value", "Key n": "Value"}
 # {

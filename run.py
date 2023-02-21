@@ -101,7 +101,7 @@ while True:
     try:
         bot.polling(none_stop=True)
         if not bot_is_running:
-            print('exit 0')
+            print('exit without errors')
             exit(0)
     except Exception as e:
         logging.error("Error: " + e.__str__())
