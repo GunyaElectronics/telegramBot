@@ -1,4 +1,5 @@
 import moviepy.editor as mp
+from PIL import Image
 
 
 class MyAudioExtractor:
@@ -14,3 +15,11 @@ class MyAudioExtractor:
             video.audio.write_audiofile(self.file_result)
         except FileExistsError:
             print('File already exist')
+
+
+def get_jpg_from_webp(file_webp, jpg_result=None):
+    with Image.open(file_webp) as im:
+        im = im.convert('RGB')
+        if jpg_result is None:
+            jpg_result = file_webp.replace('.webp', '.jpg')
+        im.save(jpg_result, 'JPEG')
