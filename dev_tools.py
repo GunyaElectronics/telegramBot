@@ -1,5 +1,7 @@
 import moviepy.editor as mp
 from PIL import Image
+import zlib
+import os
 
 
 class MyAudioExtractor:
@@ -23,3 +25,16 @@ def get_jpg_from_webp(file_webp, jpg_result=None):
         if jpg_result is None:
             jpg_result = file_webp.replace('.webp', '.jpg')
         im.save(jpg_result, 'JPEG')
+
+
+def calculate_crc32(file_name, print_enable=False):
+    with open(file_name, 'rb') as f:
+        buf = f.read()
+        crc32 = zlib.crc32(buf)
+        if print_enable:
+            print(f'CRC32: {crc32:08X}')
+        return crc32
+
+
+def file_size(file_name):
+    return os.path.getsize(file_name)
