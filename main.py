@@ -14,6 +14,30 @@ from aiogram.types import (
     KeyboardButton
 )
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+import requests
+
+def get_ukrainian_exchange_rates():
+    # URL публічного API ПриватБанку для готівкового курсу
+    url = "https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=5"
+    
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Перевірка на помилки HTTP
+        data = response.json()
+        
+        rates = {}
+        for item in data:
+            # Зберігаємо лише основні валюти (наприклад, USD, EUR)
+            rates[item['ccy']] = {
+                'buy': float(item['buy']),
+                'sale': float(item['sale'])
+            }
+        return rates
+        
+    except requests.exceptions.RequestException as e:
+        print(f"Помилка при отриманні даних: {e}")
+        return None
+
 
 # Завантаження змінних з .env
 load_dotenv()
@@ -124,14 +148,36 @@ class MyBot:
 
             await message.answer("\n".join(response_lines), parse_mode="HTML")
 
+        # Ваш оновлений хендлер
         @self.dp.message(F.text == "💵 Курс валют", F.from_user.id == self.my_id)
         async def cmd_currency(message: types.Message):
-            await message.answer(
-                "💵 <b>Орієнтовний курс валют:</b>\n\n"
-                "🇺🇸 <b>USD</b>: купівля ~41.20 | продаж ~41.70 грн\n"
-                "🇪🇺 <b>EUR</b>: купівля ~44.50 | продаж ~45.20 грн",
-                parse_mode="HTML"
-            )
+            # Надсилаємо проміжний статус, оскільки запит до API може зайняти 1-2 секунди
+            status_msg = await message.answer("🔄 Оновлюю дані...")
+            
+            # Отримуємо реальні дані
+            actual_rates = get_ukrainian_exchange_rates()
+            
+            if actual_rates and actual_rates["USD"]["buy"] and actual_rates["EUR"]["buy"]:
+                # Форматуємо виведення до двох знаків після коми
+                usd_buy = f"{actual_rates['USD']['buy']:.2f}"
+                usd_sell = f"{actual_rates['USD']['sale']:.2f}"
+                eur_buy = f"{actual_rates['EUR']['buy']:.2f}"
+                eur_sell = f"{actual_rates['EUR']['sale']:.2f}"
+                
+                text = (
+                    "💵 <b>Актуальний курс валют (Приват Банк):</b>\n\n"
+                    f"🇺🇸 <b>USD</b>: купівля {usd_buy} | продаж {usd_sell} грн\n"
+                    f"🇪🇺 <b>EUR</b>: купівля {eur_buy} | продаж {eur_sell} грн"
+                )
+            else:
+                # Резервний варіант, якщо API лежить
+                text = (
+                    "⚠️ Не вдалося отримати свіжі дані з API."
+                )
+                
+            # Видаляємо повідомлення про завантаження та надсилаємо результат
+            await status_msg.delete()
+            await message.answer(text, parse_mode="HTML")
 
         @self.dp.message(Command("remind"), F.from_user.id == self.my_id)
         async def cmd_remind(message: types.Message, command: CommandObject):
